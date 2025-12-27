@@ -1,69 +1,97 @@
 #!/bin/bash
 
+# -----------------------
 # Ayarlar
-VERSION_FILE="version"
-APPFILE="deus.AppImage"
-VERSION_URL="http://192.168.1.20:3000/electron-version"        # sunucudaki version dosyası
-APP_URL="http://192.168.1.20:3000/download-electron"  # AppImage URL
-WORKDIR=$(pwd)
+# -----------------------
+WORKDIR="/home/rot/Desktop/deus-service"
+VERSION_FILE="$WORKDIR/version"
+ZIPFILE="$WORKDIR/deus.zip"
+VERSION_URL="http://192.168.1.20:3000/161c0393-9b45-406a-b3a9-1eae11a5e404"
+ZIP_URL="http://192.168.1.20:3000/0ded29c9-1ddb-44be-ac65-8c0540595ab7"
+APPFILE="$WORKDIR/deus.AppImage"
+SERVICE_NAME="deus-updater.service"
 
-echo "Çalışma dizini: $WORKDIR"
+# Dizin kontrolü
+cd "$WORKDIR" || exit
 
 # -----------------------
-# 1️⃣ Version kontrol
+# 1️⃣ Version kontrol ve zip indir
 # -----------------------
 if [ -f "$VERSION_FILE" ]; then
     LOCAL_VERSION=$(cat "$VERSION_FILE")
-    echo "Local version: $LOCAL_VERSION"
 else
-    echo "Version dosyası yok. İlk indiriliyor..."
     LOCAL_VERSION=""
 fi
 
 REMOTE_VERSION=$(curl -s "$VERSION_URL")
-echo "Remote version: $REMOTE_VERSION"
 
 if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
-    echo "Yeni sürüm bulundu! Güncelleniyor..."
-    [ -f "$APPFILE" ] && rm -f "$APPFILE"
-    
-    curl -L --fail -o "$APPFILE" "$APP_URL"
-    chmod +x "$APPFILE"
-    
-    echo "$REMOTE_VERSION" > "$VERSION_FILE"
-    echo "Güncelleme tamamlandı: $APPFILE"
+    echo "Yeni sürüm var. Güncelleniyor..."
+    [ -f "$ZIPFILE" ] && rm -f "$ZIPFILE"
+    curl -L --fail -o "$ZIPFILE" "$ZIP_URL"
+    unzip -o "$ZIPFILE" -d "$WORKDIR"
+    rm -f "$ZIPFILE"
+    echo "$REMOTE_VERSION" | tee "$VERSION_FILE" > /dev/null
+    echo "Güncelleme tamamlandı."
 else
-    echo "Zaten en güncel sürüm. İndirme atlanıyor."
+    echo "Zaten güncel."
 fi
 
 # -----------------------
 # 2️⃣ npm install
 # -----------------------
-if [ -f "package.json" ]; then
+if [ -f "$WORKDIR/package.json" ]; then
     echo "npm install çalıştırılıyor..."
     npm install
-else
-    echo "package.json bulunamadı, npm install atlanıyor."
 fi
 
 # -----------------------
-# 3️⃣ npm start
+# 3️⃣ npm start (background)
 # -----------------------
-if [ -f "package.json" ]; then
-    echo "npm start çalıştırılıyor..."
-    npm start &
-else
-    echo "package.json bulunamadı, npm start atlanıyor."
+if [ -f "$WORKDIR/package.json" ]; then
+    echo "npm start başlatılıyor..."
+    # Önce eski süreci sonlandır (opsiyonel ama sağlıklı)
+    pkill -f "npm start" || true
+    nohup npm start > "$WORKDIR/npm.log" 2>&1 &
 fi
 
+
+
 # -----------------------
-# 4️⃣ AppImage çalıştır
+# 5️⃣ Kendini systemd servisi olarak ekle
 # -----------------------
-if [ -f "$APPFILE" ]; then
-    echo "AppImage çalıştırılıyor..."
-    ./"$APPFILE" &
+SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME"
+
+if [ ! -f "$SERVICE_FILE" ]; then
+    echo "Servis oluşturuluyor: $SERVICE_NAME"
+
+    # Type=forking seçildi çünkü nohup ile arka plana süreç atıyoruz
+    sudo tee "$SERVICE_FILE" > /dev/null <<EOL
+[Unit]
+Description=Deus Updater Script
+After=network.target graphical.target
+
+[Service]
+Type=forking
+ExecStart=/bin/bash $WORKDIR/start.sh
+User=$(whoami)
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/$(whoami)/.Xauthority
+WorkingDirectory=$WORKDIR
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable "$SERVICE_NAME"
+    echo "Servis oluşturuldu ve enable edildi."
+    sudo reboot
 else
-    echo "AppImage bulunamadı, çalıştırma atlanıyor."
+    echo "Servis zaten mevcut."
+    sudo bash $WORKDIR/start-electron.sh
 fi
 
 echo "Tüm işlemler tamamlandı."
+
