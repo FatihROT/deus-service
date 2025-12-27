@@ -2,9 +2,9 @@
     "name": "deus-service",
     "version": "1.0.0",
     "description": "Deus Service",
-    "main": "index.js",
+    "main": "deus-service.js",
     "scripts": {
-      "start": "node index.js"
+      "start": "node deus-service.js"
     },
     "keywords": [],
     "author": "",
