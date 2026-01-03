@@ -117,34 +117,9 @@ EOF
 
 sudo chown $USER_NAME:$USER_NAME /home/$USER_NAME/.xinitrc
 sudo chmod +x /home/$USER_NAME/.xinitrc
+echo "🔓 Çalışma klasörü izinleri ayarlanıyor..."
+sudo chmod -R 777 $WORKDIR
 
-# -------------------------
-# electron.service
-# -------------------------
-# echo "🧱 electron.service yazılıyor..."
-
-# sudo tee /etc/systemd/system/electron.service > /dev/null <<EOF
-# [Unit]
-# Description=Deus Electron
-# # Masaüstü oturum yöneticisinin (lightdm vb.) tamamen bitmesini bekler
-# After=updater.service
-# Requires=updater.service
-
-# [Service]
-# Type=simple
-# User=rot
-# Group=rot
-# Environment=DISPLAY=:0
-# Environment=XAUTHORITY=/home/rot/.Xauthority
-# WorkingDirectory=/home/rot/Desktop/deus-service
-
-# ExecStart=/bin/bash /home/rot/Desktop/deus-service/electron.sh
-# Restart=always
-# RestartSec=5
-
-# [Install]
-# WantedBy=multi-user.target
-# EOF
 
 # -------------------------
 # systemd reload
@@ -159,7 +134,6 @@ sudo systemctl daemon-reload
 echo "✅ Servisler enable ediliyor..."
 sudo systemctl enable updater.service
 sudo systemctl enable backend.service
-# sudo systemctl enable electron.service
 sudo systemctl enable deus-kiosk
 
 
@@ -169,7 +143,6 @@ sudo systemctl enable deus-kiosk
 echo "▶️ Servisler başlatılıyor..."
 sudo systemctl start updater.service
 sudo systemctl start backend.service
-# sudo systemctl start electron.service
 
 echo "🎉 TÜM SERVİSLER KURULDU VE ÇALIŞIYOR"
 echo "🔁 Reboot sonrası otomatik başlayacaklar"
