@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-
+export NVM_DIR="/home/rot/.nvm"
+source "$NVM_DIR/nvm.sh"
 WORKDIR="/home/rot/deus-service"
 VERSION_FILE="$WORKDIR/version"
 ZIPFILE="$WORKDIR/update.zip"
