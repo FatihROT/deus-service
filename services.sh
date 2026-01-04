@@ -56,12 +56,12 @@ EOF
 echo "🖥️ Kiosk (Electron) kuruluyor..."
 
 # LightDM kapat
-sudo systemctl disable lightdm 2>/dev/null || true
-sudo systemctl set-default multi-user.target
+# sudo systemctl disable lightdm 2>/dev/null || true
+# sudo systemctl set-default multi-user.target
 
 # TTY1 login'i kapat (çok önemli)
-sudo systemctl disable getty@tty1.service 2>/dev/null || true
-sudo systemctl mask getty@tty1.service
+# sudo systemctl disable getty@tty1.service 2>/dev/null || true
+# sudo systemctl mask getty@tty1.service
 
 # -------------------------
 # deus-kiosk.service
