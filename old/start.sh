@@ -3,7 +3,7 @@
 # -----------------------
 # Ayarlar
 # -----------------------
-WORKDIR="/home/rot/Desktop/deus-service"
+WORKDIR="/home/rot/deus-service"
 VERSION_FILE="$WORKDIR/version"
 ZIPFILE="$WORKDIR/deus.zip"
 VERSION_URL="http://192.168.1.20:3000/161c0393-9b45-406a-b3a9-1eae11a5e404"

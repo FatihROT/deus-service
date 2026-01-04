@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-WORKDIR="/home/rot/Desktop/deus-service"
+WORKDIR="/home/rot/deus-service"
 VERSION_FILE="$WORKDIR/version"
 ZIPFILE="$WORKDIR/update.zip"
 VERSION_URL="https://api.ofsis.app/161c0393-9b45-406a-b3a9-1eae11a5e404"

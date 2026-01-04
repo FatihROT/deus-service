@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Çalışma dizinine git
-cd /home/rot/Desktop/deus-service/ || exit
+cd /home/rot/deus-service/ || exit
 chmod +x deus.AppImage
 
 # X sunucusunu başlat ve içinde komutları çalıştır

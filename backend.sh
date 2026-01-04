@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /home/rot/Desktop/deus-service
+cd /home/rot/deus-service
 exec node deus-service.js
