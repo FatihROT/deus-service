@@ -39,7 +39,7 @@ Requires=updater.service
 
 [Service]
 Type=simple
-User=$USER_NAME
+User=root
 WorkingDirectory=$WORKDIR
 ExecStart=/bin/bash $WORKDIR/backend.sh
 Restart=always
