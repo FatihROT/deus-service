@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-WORKDIR="/home/rot/deus-service"
-USER_NAME="rot"
+WORKDIR="/home/redorigin/deus-service"
+USER_NAME="redorigin"
 
 echo "🚀 Deus servis kurulumu başlıyor..."
 

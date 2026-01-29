@@ -1,6 +1,6 @@
 #!/bin/bash
-export NVM_DIR="/home/rot/.nvm"
+export NVM_DIR="/home/redorigin/.nvm"
 source "$NVM_DIR/nvm.sh"
 
-cd /home/rot/deus-service
+cd /home/redorigin/deus-service
 exec npm start
