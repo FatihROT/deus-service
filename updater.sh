@@ -34,7 +34,7 @@ if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
     if [ -f "$WORKDIR/package.json" ]; then
         npm install --production
     fi
-
+    chmod +x $WORKDIR/deus.AppImage
     echo "✅ Update tamamlandı"
 else
     echo "✅ Zaten güncel"
