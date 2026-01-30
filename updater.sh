@@ -37,6 +37,8 @@ if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
     fi
     chmod +x $WORKDIR/deus.AppImage
     echo "✅ Update tamamlandı"
+    sleep 3
+    reboot
 else
     echo "✅ Zaten güncel"
 fi
