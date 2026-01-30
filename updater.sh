@@ -28,6 +28,7 @@ if [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
     curl -fL "$ZIP_URL" -o "$ZIPFILE"
     unzip -o "$ZIPFILE" -d "$WORKDIR"
     rm -f "$ZIPFILE"
+    chown -R redorigin:redorigin "$WORKDIR"
 
     echo "$REMOTE_VERSION" > "$VERSION_FILE"
 

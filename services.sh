@@ -105,7 +105,7 @@ xrandr --output DSI-1 --rotate left 2>/dev/null || \
 xrandr --output DSI-0 --rotate left
 
 # touch
-xinput set-prop 6 'Coordinate Transformation Matrix' 0 -1 1 1 0 0 0 0 1 || true
+xinput set-prop 6 'Coordinate Transformation Matrix' 1 0 0 0 1 0 0 0 1 || true
 
 cd $WORKDIR || exit 1
 
